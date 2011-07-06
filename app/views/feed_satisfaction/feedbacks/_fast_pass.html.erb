@@ -1,0 +1,3 @@
+<% if @user %>
+  <%= FeedSatisfaction::FastPass.script(@user.email, @user.name, @user.username) %>
+<% end %>

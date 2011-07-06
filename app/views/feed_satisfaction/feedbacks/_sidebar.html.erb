@@ -1,0 +1,16 @@
+<% if FeedSatisfaction.sidebar_name %>
+  <% content_for(FeedSatisfaction.sidebar_name) do %>
+    <div id="gsfn_list_widget">
+      <h2><a class="widget_title" href="<%= FeedSatisfaction.account_url %>">Active Discussions</a></h2>
+      <div id="gsfn_content">Loading...</div>
+      <div class="powered_by">
+        <a href="<%= FeedSatisfaction.account_url %>">
+          <img alt="Favicon" src="http://getsatisfaction.com/favicon.gif" style="vertical-align: middle;"/>
+        </a>
+        <a href="<%= FeedSatisfaction.account_url %>">Get Satisfaction support network</a>
+      </div>
+    </div>
+    <script src="<%= FeedSatisfaction.account_url %>widgets/javascripts/<%= FeedSatisfaction.widget_id %>/widgets.js" type="text/javascript"></script>
+    <script src="<%= FeedSatisfaction.account_url %>topics.widget?callback=gsfnTopicsCallback&amp;length=0&amp;limit=10&amp;sort=recently_active" type="text/javascript"></script>
+  <% end %>
+<% end %>
