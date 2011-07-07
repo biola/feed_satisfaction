@@ -4,6 +4,8 @@ require 'oauth'
 require 'oauth/client/net_http'
 require 'erb'
 
+# This file was adapted from http://support.soundcloud.com/fastpass/ruby.zip
+
 #
 # Helper module for integrating Get Satisfaction's FastPass single-sign-on service into a Ruby web 
 # app. Use #url to create a signed FastPass URL, and #script to generate the JS-based integration.
@@ -14,6 +16,14 @@ module FeedSatisfaction
     
     def self.domain
       FeedSatisfaction.domain
+    end
+
+    def self.key
+      FeedSatisfaction.fastpass_key
+    end
+    
+    def self.secret
+      FeedSatisfaction.fastpass_secret
     end
     
     #
@@ -52,35 +62,37 @@ module FeedSatisfaction
     # URLs to include a 'fastpass' query parameter with a signed fastpass URL.
     #
     def self.script(email, name, uid, secure=false, additional_fields={})
-      url = url(email, name, uid, secure, additional_fields)
-      
-      html = <<-EOS
-      <script type="text/javascript">
-        var GSFN;
-        if(GSFN == undefined) { GSFN = {}; }
+      if key && secret
+        url = url(email, name, uid, secure, additional_fields)
+        
+        html = <<-EOS
+        <script type="text/javascript">
+          var GSFN;
+          if(GSFN == undefined) { GSFN = {}; }
 
-        (function(){
-          add_js = function(jsid, url) {
-            var head = document.getElementsByTagName("head")[0];
-            script = document.createElement('script');
-            script.id = jsid;
-            script.type = 'text/javascript';
-            script.src = url;
-            head.appendChild(script);
-          }
-          add_js("fastpass_common", document.location.protocol + "//#{domain}/javascripts/fastpass.js");
+          (function(){
+            add_js = function(jsid, url) {
+              var head = document.getElementsByTagName("head")[0];
+              script = document.createElement('script');
+              script.id = jsid;
+              script.type = 'text/javascript';
+              script.src = url;
+              head.appendChild(script);
+            }
+            add_js("fastpass_common", document.location.protocol + "//#{domain}/javascripts/fastpass.js");
 
-          if(window.onload) { var old_load = window.onload; }
-          window.onload = function() {
-            if(old_load) old_load();
-            add_js("fastpass", #{url.to_json});
-          }
-        })()
+            if(window.onload) { var old_load = window.onload; }
+            window.onload = function() {
+              if(old_load) old_load();
+              add_js("fastpass", #{url.to_json});
+            }
+          })()
 
-      </script>
-      EOS
-      
-      html.html_safe
+        </script>
+        EOS
+        
+        html.html_safe
+      end
     end
   end
 end
