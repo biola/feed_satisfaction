@@ -14,5 +14,6 @@ spec = Gem::Specification.new do |s|
   s.author = "Adam Crownoble"
   s.email = "adam@obledesign.com"
   s.homepage = "https://github.com/biola/feed_satisfaction"
+  s.license = 'MIT'
   s.add_dependency('oauth', '>= 0.4.0')
 end
